@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="800" minWidth="800" prefHeight="1080.0" prefWidth="1940.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dreaght.flexure.FlexureController">
+   <style>
+      -fx-background-color: rgba(0, 0, 0); <!-- This sets the background to black with 50% opacity -->
+   </style>
+   <children>
+      <ImageView fx:id="imageView" fitHeight="1080.0" fitWidth="1940.0" onMouseClicked="#onMouseClicked" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="38.0" layoutY="26.0" text="Radial coefficient" textFill="WHITE">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+      <TextField fx:id="radialCoefficient" layoutX="38.0" layoutY="55.0" onKeyReleased="#onRadialCoefficientTextFieldUpdate" prefHeight="26.0" prefWidth="104.0" text="0.0005" />
+      <Label layoutX="38.0" layoutY="97.0" text="Central coefficient" textFill="WHITE">
+         <font>
+            <Font size="20.0" />
+         </font></Label>
+      <TextField fx:id="centralCoefficient" layoutX="38.0" layoutY="126.0" onKeyReleased="#onCentralCoefficientTextFieldUpdate" prefHeight="26.0" prefWidth="104.0" text="1.1" />
+      <Label layoutX="38.0" layoutY="179.0" prefHeight="29.0" prefWidth="65.0" text="Radius" textFill="WHITE">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="radius" layoutX="38.0" layoutY="208.0" onKeyReleased="#onRadiusUpdate" prefHeight="26.0" prefWidth="65.0" text="50" />
+      <Label layoutX="110.0" layoutY="179.0" prefHeight="29.0" prefWidth="65.0" text="Sigma" textFill="WHITE">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="sigma" layoutX="110.0" layoutY="208.0" onKeyReleased="#onSigmaUpdate" prefHeight="17.0" prefWidth="65.0" text="50" />
+   </children>
+</Pane>
