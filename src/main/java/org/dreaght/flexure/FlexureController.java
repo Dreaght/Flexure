@@ -93,8 +93,6 @@ public class FlexureController {
             FlexureApplication.getInstance().getImageLoader().reloadMasksOnSketch();
             FlexureApplication.getInstance().getImageLoader().drawSketch();
         });
-
-        System.out.println("onGaussianCoefficientUpdate");
     }
 
     public double getRadialCoefficient() {

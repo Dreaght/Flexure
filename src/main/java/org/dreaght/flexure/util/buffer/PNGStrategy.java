@@ -14,7 +14,6 @@ class PNGStrategy implements BIStrategy {
 
     @Override
     public BufferedImage convertToBuffer(float targetWidth, float targetHeight) throws IOException {
-        System.out.println("PNG");
         return BufferedUtil.resizeWithProportions(ImageIO.read(file), (int) targetWidth, (int) targetHeight);
     }
 }
