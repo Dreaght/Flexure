@@ -58,9 +58,9 @@ jlink {
   launcher {
     name = 'app'
   }
-//  targetPlatform("win") {
-//    jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/semeru17-binaries/releases/download/jdk-17.0.11%2B9_openj9-0.44.0/ibm-semeru-open-jdk_x64_windows_17.0.11_9_openj9-0.44.0.zip")
-//  }
+  targetPlatform("win") {
+    jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/semeru17-binaries/releases/download/jdk-17.0.11%2B9_openj9-0.44.0/ibm-semeru-open-jdk_x64_windows_17.0.11_9_openj9-0.44.0.zip")
+  }
 //  targetPlatform("mac") {
 //    jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/semeru17-binaries/releases/download/jdk-17.0.11%2B9_openj9-0.44.0/ibm-semeru-open-jdk_aarch64_mac_17.0.11_9_openj9-0.44.0.tar.gz")
 //  }

@@ -56,10 +56,10 @@ public class BufferedUtil {
     }
 
     public static BufferedImage resizeWithProportions(BufferedImage source, int width, int height) {
-        int aspectRatio = source.getWidth() / source.getHeight();
+        double aspectRatio = (double) source.getWidth() / source.getHeight();
 
-        int newWidth;
-        int newHeight;
+        double newWidth;
+        double newHeight;
         if (width / aspectRatio <= height) {
             newWidth = width;
             newHeight = (width / aspectRatio);
@@ -68,10 +68,10 @@ public class BufferedUtil {
             newHeight = height;
         }
 
-        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage resizedImage = new BufferedImage((int) newWidth, (int) newHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = resizedImage.createGraphics();
 
-        g.drawImage(source.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH), 0, 0, null);
+        g.drawImage(source.getScaledInstance((int) newWidth, (int) newHeight, Image.SCALE_SMOOTH), 0, 0, null);
         g.dispose();
 
         return resizedImage;

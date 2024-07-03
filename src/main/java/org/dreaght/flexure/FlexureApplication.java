@@ -27,14 +27,21 @@ public class FlexureApplication extends Application {
     private Stage stage;
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
 
         instance = this;
         this.stage = stage;
 
         fxmlLoader = new FXMLLoader(FlexureApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
 
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load());
+        } catch (IOException e) {
+            System.out.println("Failed to load the scene!");
+        }
+
+        assert scene != null;
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 stage.close();

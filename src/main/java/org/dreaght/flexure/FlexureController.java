@@ -2,14 +2,17 @@ package org.dreaght.flexure;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import lombok.Getter;
 import org.dreaght.flexure.loader.ImageLoader;
 import org.dreaght.flexure.mask.GaussianMask;
+import org.dreaght.flexure.mask.ResizeMask;
 import org.dreaght.flexure.mask.VectorisationMask;
 import org.dreaght.flexure.util.ValidatorUtil;
 
@@ -29,6 +32,9 @@ public class FlexureController {
 
     @FXML
     private TextField sigma;
+
+    @FXML
+    private Slider size;
 
     @FXML
     protected void onMouseClicked(MouseEvent event) {
@@ -93,6 +99,21 @@ public class FlexureController {
             FlexureApplication.getInstance().getImageLoader().reloadMasksOnSketch();
             FlexureApplication.getInstance().getImageLoader().drawSketch();
         });
+    }
+
+    @FXML
+    protected void onSizeSliderMoved() {
+        FlexureApplication.getInstance().getImageLoader().getMasks().stream().filter(mask -> mask instanceof ResizeMask).forEach(mask -> {
+            ((ResizeMask) mask).setSizeCoefficient(size.getValue());
+            FlexureApplication.getInstance().getImageLoader().reloadMasksOnSketch();
+            FlexureApplication.getInstance().getImageLoader().drawSketch();
+        });
+
+        ImageLoader imageLoader = FlexureApplication.getInstance().getImageLoader();
+        Stage stage = FlexureApplication.getInstance().getStage();
+        imageLoader.setSketchStartX((int) ((stage.getWidth() / 2) - ((double) imageLoader.getSketch().getWidth() / 2)));
+        imageLoader.setSketchStartY((int) ((stage.getHeight() / 2) - ((double) imageLoader.getSketch().getWidth() / 2)));
+        imageLoader.drawSketch();
     }
 
     public double getRadialCoefficient() {
