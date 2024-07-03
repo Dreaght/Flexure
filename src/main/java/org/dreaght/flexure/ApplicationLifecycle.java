@@ -40,8 +40,8 @@ public class ApplicationLifecycle {
                         new FillMask(),
                         new ResizeMask(),
                         new InvertColorMask(),
-                        new GaussianMask(),
-                        new VectorisationMask()
+                        new GaussianMask()
+//                        new VectorisationMask()
 
                 )));
         ImageLoader imageLoader = app.getImageLoader();

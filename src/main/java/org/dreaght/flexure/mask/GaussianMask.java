@@ -22,19 +22,55 @@ public class GaussianMask implements Mask {
         double[][] gradientX = gaussianBlurResult.gradientX();
         double[][] gradientY = gaussianBlurResult.gradientY();
 
-        bufferedImage = gaussianBlurResult.blurredImage();
+        BufferedImage blurredImage = gaussianBlurResult.blurredImage();
+//        drawArrows(blurredImage, gradientX, gradientY, 20, 0, 0, false, Color.YELLOW);
 
-        drawArrows(bufferedImage, gradientX, gradientY, 20, 0, 0, false);
+        BufferedImage invertedGaussianImage = invertGaussianField(blurredImage, bufferedImage, gradientX, gradientY);
+//        drawArrows(invertedGaussianImage, gradientX, gradientY, 20, 0, 0, false, Color.RED);
 
-        return bufferedImage;
+        return invertedGaussianImage;
+    }
+
+    private BufferedImage invertGaussianField(BufferedImage blurredImage, BufferedImage image, double[][] gradientX, double[][] gradientY) {
+        BufferedImage tempImage = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                if (y >= gradientX.length || y >= gradientY.length) continue;
+                if (x >= gradientX[y].length || x >= gradientY[y].length) continue;
+
+                int dx = 0;
+                int dy = 0;
+                try {
+                    dx = (blurredImage.getRGB(Math.max(x - 1, 0), y) - blurredImage.getRGB(Math.min(x + 1, blurredImage.getWidth()), y)) / 20000;
+                    dy = (blurredImage.getRGB(x, Math.min(y + 1, blurredImage.getHeight())) - blurredImage.getRGB(x, Math.max(y - 1, 0))) / 20000;
+                } catch (Exception ignored) {}
+
+                try {
+                    tempImage.setRGB(
+                            Math.max(Math.min(x, tempImage.getWidth() - 1), 0),
+                            Math.max(Math.min(y, tempImage.getHeight() - 1), 0),
+                            image.getRGB(
+                                    Math.max(Math.min(x + dx, image.getWidth()), 0),
+                                    Math.max(Math.min(y + dy, image.getHeight()), 0)
+                            ));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }
+
+        return tempImage;
     }
 
     private void drawArrows(BufferedImage image, double[][] gradientX, double[][] gradientY,
                             final int step_size,
                             final int vector_offset_X, final int vector_offset_Y,
-                            boolean debug) {
+                            boolean debug, Color color) {
         Graphics2D g = image.createGraphics();
-        g.setColor(Color.RED);
+        g.setColor(color);
 
         for (int y = 0; y < image.getHeight(); y += step_size) {
             for (int x = 0; x < image.getWidth() - 1; x += step_size) {
@@ -46,14 +82,14 @@ public class GaussianMask implements Mask {
 
                 //dX(x:y) = val(x-1 : y) - val(x+1 : y)
                 //dY(x:y) = val(x:y+1) - val(x:y-1)
-                int dx = (image.getRGB(Math.max(x - 1, 0), y) - image.getRGB(Math.min(x + 1, image.getWidth()), y)) / 10000;
-                int dy = (image.getRGB(x, Math.min(y + 1, image.getHeight())) - image.getRGB(x, Math.max(y - 1, 0))) / 10000;
+                int dx = (image.getRGB(Math.max(x - 1, 0), y) - image.getRGB(Math.min(x + 1, image.getWidth()), y)) / 1000000;
+                int dy = (image.getRGB(x, Math.min(y + 1, image.getHeight())) - image.getRGB(x, Math.max(y - 1, 0))) / 1000000;
 
                 if (debug) {
                     System.out.println(dx + " " + dy);
                 }
 
-                drawArrow(g, x + dx, y + dy, x, y);
+                drawArrow(g, x - dx, y + dy, x, y);
             }
         }
 
