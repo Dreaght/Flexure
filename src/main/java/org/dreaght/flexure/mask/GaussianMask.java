@@ -14,6 +14,11 @@ public class GaussianMask implements Mask {
     private int radius = 50;
     private int sigma = 50;
 
+    private double arrowLengthCoefficient = 0.0002;
+
+    private double arrowOffsetX;
+    private double arrowOffsetY;
+
     @Override
     public BufferedImage update(BufferedImage bufferedImage) {
 
@@ -42,8 +47,12 @@ public class GaussianMask implements Mask {
                 int dx = 0;
                 int dy = 0;
                 try {
-                    dx = (blurredImage.getRGB(Math.max(x - 1, 0), y) - blurredImage.getRGB(Math.min(x + 1, blurredImage.getWidth()), y)) / 20000;
-                    dy = (blurredImage.getRGB(x, Math.min(y + 1, blurredImage.getHeight())) - blurredImage.getRGB(x, Math.max(y - 1, 0))) / 20000;
+                    dx = (int) ((blurredImage.getRGB(
+                            Math.max(x - 1, 0), y) - blurredImage.getRGB(Math.min(x + 1, blurredImage.getWidth()), y))
+                            * arrowLengthCoefficient);
+                    dy = (int) ((blurredImage.getRGB(
+                            x, Math.min(y + 1, blurredImage.getHeight())) - blurredImage.getRGB(x, Math.max(y - 1, 0)))
+                            * arrowLengthCoefficient);
                 } catch (Exception ignored) {}
 
                 try {
@@ -51,14 +60,11 @@ public class GaussianMask implements Mask {
                             Math.max(Math.min(x, tempImage.getWidth() - 1), 0),
                             Math.max(Math.min(y, tempImage.getHeight() - 1), 0),
                             image.getRGB(
-                                    Math.max(Math.min(x + dx, image.getWidth()), 0),
-                                    Math.max(Math.min(y + dy, image.getHeight()), 0)
+                                    (int) Math.max(Math.min(x + (dx * arrowOffsetX), image.getWidth()), 0),
+                                    (int) Math.max(Math.min(y + (dy * arrowOffsetY), image.getHeight()), 0)
                             ));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception ignored) {
                 }
-
-
             }
         }
 
@@ -77,11 +83,6 @@ public class GaussianMask implements Mask {
                 if (y >= gradientX.length || y >= gradientY.length) continue;
                 if (x >= gradientX[y].length || x >= gradientY[y].length) continue;
 
-//                double dx = gradientX[x][y] + vector_offset_X;
-//                double dy = gradientY[x][y] + vector_offset_Y;
-
-                //dX(x:y) = val(x-1 : y) - val(x+1 : y)
-                //dY(x:y) = val(x:y+1) - val(x:y-1)
                 int dx = (image.getRGB(Math.max(x - 1, 0), y) - image.getRGB(Math.min(x + 1, image.getWidth()), y)) / 1000000;
                 int dy = (image.getRGB(x, Math.min(y + 1, image.getHeight())) - image.getRGB(x, Math.max(y - 1, 0))) / 1000000;
 

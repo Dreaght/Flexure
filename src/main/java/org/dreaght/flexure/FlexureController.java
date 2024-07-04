@@ -37,6 +37,15 @@ public class FlexureController {
     private Slider size;
 
     @FXML
+    private TextField arrowLength;
+
+    @FXML
+    private TextField arrowOffsetX;
+
+    @FXML
+    private TextField arrowOffsetY;
+
+    @FXML
     protected void onMouseClicked(MouseEvent event) {
         ImageLoader imageLoader = FlexureApplication.getInstance().getImageLoader();
 
@@ -73,6 +82,14 @@ public class FlexureController {
             FlexureApplication.getInstance().getImageLoader().reloadMasksOnSketch();
             FlexureApplication.getInstance().getImageLoader().drawSketch();
         });
+    }
+
+    private double getRadialCoefficient() {
+        return Double.parseDouble(radialCoefficient.getText());
+    }
+
+    private double getCentralCoefficient() {
+        return Double.parseDouble(centralCoefficient.getText());
     }
 
     @FXML
@@ -116,11 +133,37 @@ public class FlexureController {
         imageLoader.drawSketch();
     }
 
-    public double getRadialCoefficient() {
-        return Double.parseDouble(radialCoefficient.getText());
+    @FXML
+    protected void onGaussianOffsetXUpdate(KeyEvent event) {
+        onGaussianVectorCoefficientUpdate(event);
     }
 
-    public double getCentralCoefficient() {
-        return Double.parseDouble(centralCoefficient.getText());
+    @FXML
+    protected void onGaussianOffsetYUpdate(KeyEvent event) {
+        onGaussianVectorCoefficientUpdate(event);
+    }
+
+    @FXML
+    protected void onGaussianVectorLengthUpdate(KeyEvent event) {
+        onGaussianVectorCoefficientUpdate(event);
+    }
+
+    private void onGaussianVectorCoefficientUpdate(KeyEvent event) {
+        if (event.getCode() != KeyCode.ENTER || event.getText().isEmpty()) {
+            return;
+        }
+
+        if (!ValidatorUtil.isNumbers(arrowOffsetX.getText(), arrowOffsetY.getText(), arrowLength.getText())) {
+            return;
+        }
+
+        FlexureApplication.getInstance().getImageLoader().getMasks().stream().filter(mask -> mask instanceof GaussianMask).forEach(mask -> {
+            ((GaussianMask) mask).setArrowOffsetX(Double.parseDouble(arrowOffsetX.getText()));
+            ((GaussianMask) mask).setArrowOffsetY(Double.parseDouble(arrowOffsetY.getText()));
+            ((GaussianMask) mask).setArrowLengthCoefficient(Double.parseDouble(arrowLength.getText()));
+
+            FlexureApplication.getInstance().getImageLoader().reloadMasksOnSketch();
+            FlexureApplication.getInstance().getImageLoader().drawSketch();
+        });
     }
 }
