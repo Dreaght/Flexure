@@ -56,7 +56,10 @@ public class BufferedUtil {
     }
 
     public static BufferedImage resizeWithProportions(BufferedImage source, int width, int height) {
-        double aspectRatio = (double) source.getWidth() / source.getHeight();
+        double aspectRatio = (double) source.getWidth() / (double) source.getHeight();
+
+        System.out.println("Resize with proportions (width, height): " + source.getWidth() + " " + source.getHeight());
+        System.out.println("Aspect ratio: " + aspectRatio);
 
         double newWidth;
         double newHeight;
@@ -75,6 +78,40 @@ public class BufferedUtil {
         g.dispose();
 
         return resizedImage;
+    }
+
+    public static BufferedImage scaleimage(int wid, int hei, BufferedImage img) {
+        int newWidth;
+        int newHeight;
+        double scale;
+        double imw = img.getWidth();
+        double imh = img.getHeight();
+
+        if (wid > imw && hei > imh) {
+            newWidth = (int) imw;
+            newHeight = (int) imh;
+        } else if (wid / imw < hei / imh) {
+            scale = wid / imw;
+            newWidth = (int) (scale * imw);
+            newHeight = (int) (scale * imh);
+        } else if (wid / imw > hei / imh) {
+            scale = hei / imh;
+            newWidth = (int) (scale * imw);
+            newHeight = (int) (scale * imh);
+        } else {
+            scale = wid / imw;
+            newWidth = (int) (scale * imw);
+            newHeight = (int) (scale * imh);
+        }
+
+        Image scaledImage = img.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+        BufferedImage bufferedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = bufferedImage.createGraphics();
+        g2d.drawImage(scaledImage, 0, 0, null);
+        g2d.dispose();
+
+        return bufferedImage;
     }
 
     public static BufferedImage cropImage(BufferedImage src, Rectangle rect) {

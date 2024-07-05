@@ -13,10 +13,11 @@ public class ResizeMask implements Mask {
 
     @Override
     public BufferedImage update(BufferedImage bufferedImage) {
+
         int targetWidth = Math.max((int) (bufferedImage.getWidth() * (sizeCoefficient / 50)), 300);
         int targetHeight = Math.max((int) (bufferedImage.getHeight() * (sizeCoefficient / 50)), 300);
 
-        bufferedImage = BufferedUtil.resizeWithProportions(bufferedImage, targetWidth, targetHeight);
+        bufferedImage = BufferedUtil.scaleimage(targetWidth, targetHeight, bufferedImage);
         bufferedImage = BufferedUtil.extendImage(bufferedImage, targetWidth, targetHeight);
 
         return bufferedImage;

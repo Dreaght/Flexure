@@ -118,7 +118,7 @@ public class FlexureController {
         FlexureApplication.getInstance().getImageLoader().getMasks().stream().filter(mask -> mask instanceof ResizeMask).forEach(mask -> {
             ((ResizeMask) mask).setSizeCoefficient(size.getValue());
             FlexureApplication.getInstance().getImageLoader().reloadMasksOnSketch();
-            FlexureApplication.getInstance().getImageLoader().drawSketch();
+//            FlexureApplication.getInstance().getImageLoader().drawSketch();
         });
 
         ImageLoader imageLoader = FlexureApplication.getInstance().getImageLoader();
