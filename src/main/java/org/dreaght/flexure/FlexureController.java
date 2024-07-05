@@ -3,6 +3,7 @@ package org.dreaght.flexure;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -35,9 +36,9 @@ public class FlexureController {
     @FXML
     private TextField arrowLength;
     @FXML
-    private RadioButton arrowOffsetX;
+    private RadioButton renderOption;
     @FXML
-    private RadioButton arrowOffsetY;
+    private Button vectorStateOption;
 
     @FXML
     protected void onMouseClicked(MouseEvent event) {
@@ -128,12 +129,14 @@ public class FlexureController {
     }
 
     @FXML
-    protected void onGaussianOffsetXUpdate() {
+    protected void onGaussianVectorStateOptionUpdate() {
+        vectorStateOption.setText(vectorStateOption.getText().equals("Compression") ? "Expansion" : "Compression");
+
         onGaussianVectorCoefficientUpdate();
     }
 
     @FXML
-    protected void onGaussianOffsetYUpdate() {
+    protected void onGaussianVectorRenderOptionUpdate() {
         onGaussianVectorCoefficientUpdate();
     }
 
@@ -151,9 +154,10 @@ public class FlexureController {
         }
 
         FlexureApplication.getInstance().getImageLoader().getMasks().stream().filter(mask -> mask instanceof GaussianMask).forEach(mask -> {
-            ((GaussianMask) mask).setArrowOffsetX(arrowOffsetX.isSelected() ? 1 : -1);
-            ((GaussianMask) mask).setArrowOffsetY(arrowOffsetY.isSelected() ? 1 : -1);
+            ((GaussianMask) mask).setArrowOffsetX(vectorStateOption.getText().equals("Compression") ? 1 : -1);
+            ((GaussianMask) mask).setArrowOffsetY(vectorStateOption.getText().equals("Compression") ? -1 : 1);
             ((GaussianMask) mask).setArrowLengthCoefficient(Double.parseDouble(arrowLength.getText()));
+            ((GaussianMask) mask).setShouldRenderVectors(renderOption.isSelected());
 
             FlexureApplication.getInstance().getImageLoader().reloadMasksOnSketch();
             FlexureApplication.getInstance().getImageLoader().drawSketch();

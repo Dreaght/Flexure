@@ -13,12 +13,14 @@ import java.awt.image.BufferedImage;
 public class GaussianMask implements Mask {
 
     private int radius = 200;
-    private int sigma = 20;
+    private int sigma = 45;
 
     private double arrowLengthCoefficient = 0.000015;
 
-    private double arrowOffsetX = -1;
-    private double arrowOffsetY = 1;
+    private double arrowOffsetX = 1;
+    private double arrowOffsetY = -1;
+
+    private boolean shouldRenderVectors = true;
 
     @Override
     public BufferedImage update(BufferedImage bufferedImage) {
@@ -32,7 +34,10 @@ public class GaussianMask implements Mask {
 //        drawArrows(blurredImage, gradientX, gradientY, 20, 0, 0, false, Color.YELLOW);
 
         final BufferedImage invertedGaussianImage = invertGaussianField(BufferedUtil.copyImage(blurredImage), bufferedImage, gradientX, gradientY);
-        drawArrows(invertedGaussianImage, blurredImage, gradientX, gradientY, 20, Color.RED, false);
+
+        if (shouldRenderVectors) {
+            drawArrows(invertedGaussianImage, blurredImage, gradientX, gradientY, 20, Color.RED, false);
+        }
 
         return invertedGaussianImage;
     }
@@ -83,6 +88,7 @@ public class GaussianMask implements Mask {
                     System.out.println(dx + " " + dy);
                 }
 
+                if (dx == 0 && dy == 0) continue;
                 drawArrow(g, x - dx, y + dy, x, y);
             }
         }
