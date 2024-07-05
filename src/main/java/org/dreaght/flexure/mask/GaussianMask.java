@@ -11,13 +11,13 @@ import java.awt.image.BufferedImage;
 @Getter @Setter
 public class GaussianMask implements Mask {
 
-    private int radius = 50;
-    private int sigma = 50;
+    private int radius = 200;
+    private int sigma = 20;
 
-    private double arrowLengthCoefficient = 0.0002;
+    private double arrowLengthCoefficient = 0.000015;
 
-    private double arrowOffsetX;
-    private double arrowOffsetY;
+    private double arrowOffsetX = -1;
+    private double arrowOffsetY = 1;
 
     @Override
     public BufferedImage update(BufferedImage bufferedImage) {

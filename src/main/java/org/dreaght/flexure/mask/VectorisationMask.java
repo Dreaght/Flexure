@@ -13,8 +13,8 @@ import java.awt.image.BufferedImage;
 public class VectorisationMask implements Mask {
     private Point2D massCenter = new Point2D((double) FlexureApplication.WIDTH / 2, (double) FlexureApplication.WIDTH / 2);
 
-    private double radialCoefficient = 0.0005;
-    private double centralCoefficient = 1.1;
+    private double radialCoefficient = 0;
+    private double centralCoefficient = 1;
 
     private Point2D deformPixel(Point2D pixel) {
         double r = Math.sqrt(Math.pow((pixel.getX() - massCenter.getX()), 2) + Math.pow((pixel.getY() - massCenter.getY()), 2));
