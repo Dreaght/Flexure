@@ -1,7 +1,9 @@
 package org.dreaght.flexure;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -20,30 +22,22 @@ public class FlexureController {
 
     @FXML @Getter
     private ImageView imageView;
-
     @FXML
     private TextField radialCoefficient;
-
     @FXML
     private TextField centralCoefficient;
-
     @FXML
     private TextField radius;
-
     @FXML
     private TextField sigma;
-
     @FXML
     private Slider size;
-
     @FXML
     private TextField arrowLength;
-
     @FXML
-    private TextField arrowOffsetX;
-
+    private RadioButton arrowOffsetX;
     @FXML
-    private TextField arrowOffsetY;
+    private RadioButton arrowOffsetY;
 
     @FXML
     protected void onMouseClicked(MouseEvent event) {
@@ -134,32 +128,31 @@ public class FlexureController {
     }
 
     @FXML
-    protected void onGaussianOffsetXUpdate(KeyEvent event) {
-        onGaussianVectorCoefficientUpdate(event);
+    protected void onGaussianOffsetXUpdate() {
+        onGaussianVectorCoefficientUpdate();
     }
 
     @FXML
-    protected void onGaussianOffsetYUpdate(KeyEvent event) {
-        onGaussianVectorCoefficientUpdate(event);
+    protected void onGaussianOffsetYUpdate() {
+        onGaussianVectorCoefficientUpdate();
     }
 
     @FXML
     protected void onGaussianVectorLengthUpdate(KeyEvent event) {
-        onGaussianVectorCoefficientUpdate(event);
-    }
-
-    private void onGaussianVectorCoefficientUpdate(KeyEvent event) {
         if (event.getCode() != KeyCode.ENTER || event.getText().isEmpty()) {
             return;
         }
+        onGaussianVectorCoefficientUpdate();
+    }
 
-        if (!ValidatorUtil.isNumbers(arrowOffsetX.getText(), arrowOffsetY.getText(), arrowLength.getText())) {
+    private void onGaussianVectorCoefficientUpdate() {
+        if (!ValidatorUtil.isNumber(arrowLength.getText())) {
             return;
         }
 
         FlexureApplication.getInstance().getImageLoader().getMasks().stream().filter(mask -> mask instanceof GaussianMask).forEach(mask -> {
-            ((GaussianMask) mask).setArrowOffsetX(Double.parseDouble(arrowOffsetX.getText()));
-            ((GaussianMask) mask).setArrowOffsetY(Double.parseDouble(arrowOffsetY.getText()));
+            ((GaussianMask) mask).setArrowOffsetX(arrowOffsetX.isSelected() ? 1 : -1);
+            ((GaussianMask) mask).setArrowOffsetY(arrowOffsetY.isSelected() ? 1 : -1);
             ((GaussianMask) mask).setArrowLengthCoefficient(Double.parseDouble(arrowLength.getText()));
 
             FlexureApplication.getInstance().getImageLoader().reloadMasksOnSketch();
