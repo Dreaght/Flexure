@@ -11,6 +11,8 @@ install_docker_linux() {
     elif command -v apt-get &> /dev/null; then
       sudo apt-get update
       sudo apt-get install -y docker.io
+    elif command -v pacman &> /dev/null; then
+      yes '' | sudo pacman -S docker
     else
       echo "Unsupported package manager. Please install Docker manually."
       exit 1
@@ -25,6 +27,21 @@ install_docker_linux() {
   sudo usermod -aG docker $(whoami)
 
   docker --version
+
+  # Install xhost
+  if ! command -v xhost &> /dev/null; then
+    echo "Installing xhost..."
+    if command -v yum &> /dev/null; then
+      sudo yum install -y xorg-x11-server-utils
+    elif command -v apt-get &> /dev/null; then
+      sudo apt-get install -y x11-xserver-utils
+    elif command -v pacman &> /dev/null; then
+      yes '' | sudo pacman -S xorg-xhost
+    else
+      echo "Unsupported package manager. Please install xhost manually."
+      exit 1
+    fi
+  fi
 }
 
 # Function to install Docker on macOS
@@ -40,6 +57,13 @@ install_docker_mac() {
     echo "Please start Docker Desktop manually and ensure it's running."
   fi
   docker --version
+
+  # Install xhost (xquartz)
+  if ! command -v xhost &> /dev/null; then
+    echo "Installing xquartz..."
+    brew install xquartz
+    echo "Please start XQuartz manually and ensure it's running."
+  fi
 }
 
 # Function to install Docker on Windows
