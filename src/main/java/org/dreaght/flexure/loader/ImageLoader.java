@@ -43,14 +43,11 @@ public class ImageLoader {
 
     public void reloadMasksOnSketch() {
         BufferedImage newSketch = BufferedUtil.copyImage(sourceSketch);
+
         for (Mask mask : masks) {
             newSketch = mask.update(newSketch);
         }
         sketch = newSketch;
-    }
-
-    public BufferedImage applyMaskForSketch(Mask mask) {
-        return mask.update(sketch);
     }
 
     public void drawImage(BufferedImage bufferedImage) {

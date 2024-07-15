@@ -20,14 +20,8 @@ public class GaussianMask implements Mask {
 
     @Override
     public BufferedImage update(BufferedImage bufferedImage) {
-
-        long startTime = System.currentTimeMillis();
         BufferedImage blurredImage = GaussianBlur.applyGaussianBlur(bufferedImage, radius, sigma);
-        System.out.println("Applying has took: " + (System.currentTimeMillis() - startTime));
-
-        long startTime2 = System.currentTimeMillis();
         BufferedImage invertedGaussianImage = invertGaussianField(blurredImage, bufferedImage);
-        System.out.println("Inverting has took: " + (System.currentTimeMillis() - startTime2));
 
         if (shouldRenderVectors) {
             drawArrows(invertedGaussianImage, blurredImage, 20, Color.RED, false);
