@@ -5,46 +5,42 @@ import java.util.stream.IntStream;
 
 public class GaussianBlur {
 
-    public static GaussianBlurResult applyGaussianBlur(BufferedImage srcImage, int radius, double sigma) {
+    public static BufferedImage applyGaussianBlur(BufferedImage srcImage, int radius, double sigma) {
         int width = srcImage.getWidth();
         int height = srcImage.getHeight();
         BufferedImage tempImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         BufferedImage blurredImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
         double[] kernel = createKernel(radius, sigma);
-        double[][] gradientX = new double[width][height];
-        double[][] gradientY = new double[width][height];
 
         // Horizontal pass | From srcImage to tempImage.
-        processImage(srcImage, tempImage, width, height, kernel, radius, true, gradientX, gradientY);
+        processImage(srcImage, tempImage, width, height, kernel, radius, true);
 
         // Vertical pass | From tempImage to blurredImage.
-        processImage(tempImage, blurredImage, width, height, kernel, radius, false, gradientX, gradientY);
+        processImage(tempImage, blurredImage, width, height, kernel, radius, false);
 
-        return new GaussianBlurResult(blurredImage, gradientX, gradientY);
+        return blurredImage;
     }
 
     private static void processImage(BufferedImage srcImage, BufferedImage destImage, int width, int height,
-                                     double[] kernel, int radius, boolean isHorizontal,
-                                     double[][] gradientX, double[][] gradientY) {
+                                     double[] kernel, int radius, boolean isHorizontal) {
         if (isHorizontal) {
             IntStream.range(0, height).parallel().forEach(y -> {
                 for (int x = 0; x < width; x++) {
-                    applyKernel(srcImage, destImage, width, height, kernel, radius, x, y, isHorizontal, gradientX, gradientY);
+                    applyKernel(srcImage, destImage, width, height, kernel, radius, x, y, isHorizontal);
                 }
             });
         } else {
             IntStream.range(0, width).parallel().forEach(x -> {
                 for (int y = 0; y < height; y++) {
-                    applyKernel(srcImage, destImage, width, height, kernel, radius, x, y, isHorizontal, gradientX, gradientY);
+                    applyKernel(srcImage, destImage, width, height, kernel, radius, x, y, isHorizontal);
                 }
             });
         }
     }
 
     private static void applyKernel(BufferedImage srcImage, BufferedImage destImage, int width, int height,
-                                    double[] kernel, int radius, int x, int y, boolean isHorizontal,
-                                    double[][] gradientX, double[][] gradientY) {
+                                    double[] kernel, int radius, int x, int y, boolean isHorizontal) {
         double red = 0.0, green = 0.0, blue = 0.0;
         double sum = 0.0;
         double gradientSumX = 0.0;
@@ -73,12 +69,6 @@ public class GaussianBlur {
         int b = Math.min(Math.max((int) Math.round(blue / sum), 0), 255);
 
         destImage.setRGB(x, y, (r << 16) | (g << 8) | b | (srcImage.getRGB(x, y) & 0xFF000000));
-
-        if (isHorizontal) {
-            gradientX[x][y] = gradientSumX / sum;
-        } else {
-            gradientY[x][y] = gradientSumY / sum;
-        }
     }
 
     private static double[] createKernel(int radius, double sigma) {

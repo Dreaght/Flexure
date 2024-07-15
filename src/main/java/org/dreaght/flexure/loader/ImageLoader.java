@@ -1,5 +1,6 @@
 package org.dreaght.flexure.loader;
 
+import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import lombok.Getter;
@@ -41,19 +42,26 @@ public class ImageLoader {
     }
 
     public void reloadMasksOnSketch() {
-        sketch = BufferedUtil.copyImage(sourceSketch);
-        masks.forEach(mask -> sketch = BufferedUtil.copyImage(mask.update(sketch)));
+        BufferedImage newSketch = BufferedUtil.copyImage(sourceSketch);
+        for (Mask mask : masks) {
+            newSketch = mask.update(newSketch);
+        }
+        sketch = newSketch;
+    }
+
+    public BufferedImage applyMaskForSketch(Mask mask) {
+        return mask.update(sketch);
     }
 
     public void drawImage(BufferedImage bufferedImage) {
         WritableImage writableImage = new WritableImage(bufferedImage.getWidth(), bufferedImage.getHeight());
         PixelWriter pixelWriter = writableImage.getPixelWriter();
 
-        for (int x = 0; x < bufferedImage.getWidth(); x++) {
-            for (int y = 0; y < bufferedImage.getHeight(); y++) {
-                pixelWriter.setArgb(x, y, bufferedImage.getRGB(x, y));
-            }
-        }
+        int width = bufferedImage.getWidth();
+        int height = bufferedImage.getHeight();
+        int[] rgbArray = new int[width * height];
+        bufferedImage.getRGB(0, 0, width, height, rgbArray, 0, width);
+        pixelWriter.setPixels(0, 0, width, height, PixelFormat.getIntArgbInstance(), rgbArray, 0, width);
 
         FlexureController flexureController = flexureApplication.getFxmlLoader().getController();
         flexureController.getImageView().setImage(writableImage);

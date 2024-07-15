@@ -33,17 +33,19 @@ public class ApplicationLifecycle {
         }
 
         assert bufferedImage != null;
-        app.setImageLoader(new ImageLoader(app,
+
+        bufferedImage = new FillMask().update(bufferedImage);
+        bufferedImage = new ResizeMask().update(bufferedImage);
+        bufferedImage = new InvertColorMask().update(bufferedImage);
+
+        ImageLoader imageLoaderTemp = new ImageLoader(app,
                 BufferedUtil.createEmpty(FlexureApplication.WIDTH, FlexureApplication.HEIGHT),
                 bufferedImage,
                 List.of(
-                        new FillMask(),
-                        new ResizeMask(),
-                        new InvertColorMask(),
                         new GaussianMask()
-//                        new VectorisationMask()
+                ));
 
-                )));
+        app.setImageLoader(imageLoaderTemp);
         ImageLoader imageLoader = app.getImageLoader();
 
         ((FlexureController) app.getFxmlLoader().getController()).onSizeSliderMoved();
@@ -65,5 +67,4 @@ public class ApplicationLifecycle {
         FlexureApplication.getInstance().getStage().close();
         System.exit(0);
     }
-
 }

@@ -10,10 +10,6 @@ import java.util.Queue;
 public class FillMask implements Mask {
     @Override
     public BufferedImage update(BufferedImage bufferedImage) {
-        return fillBufferedImage(bufferedImage);
-    }
-
-    private BufferedImage fillBufferedImage(BufferedImage bufferedImage) {
         BufferedImage bufImageCopy = BufferedUtil.copyImage(bufferedImage);
 
         fillArea(bufImageCopy, Color.WHITE.getRGB(), Color.BLUE.getRGB());
@@ -24,17 +20,19 @@ public class FillMask implements Mask {
     }
 
     private void fillArea(BufferedImage image, int targetColor, int replacementColor) {
+        boolean[][] visited = new boolean[image.getWidth()][image.getHeight()];
+
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
-                if (image.getRGB(x, y) == targetColor) {
-                    floodFill(image, x, y, targetColor, replacementColor);
+                if (image.getRGB(x, y) == targetColor && !visited[x][y]) {
+                    floodFill(image, x, y, targetColor, replacementColor, visited);
                     return;
                 }
             }
         }
     }
 
-    private void floodFill(BufferedImage image, int startX, int startY, int targetColor, int replacementColor) {
+    private void floodFill(BufferedImage image, int startX, int startY, int targetColor, int replacementColor, boolean[][] visited) {
         int width = image.getWidth();
         int height = image.getHeight();
 
@@ -45,19 +43,24 @@ public class FillMask implements Mask {
 
         Queue<Point> queue = new LinkedList<>();
         queue.add(new Point(startX, startY));
+        visited[startX][startY] = true;
 
         while (!queue.isEmpty()) {
             Point point = queue.poll();
             int x = point.x;
             int y = point.y;
 
-            if (x < 0 || x >= width || y < 0 || y >= height) continue;
             if (image.getRGB(x, y) != targetColor) continue;
 
             image.setRGB(x, y, replacementColor);
 
             for (int[] direction : directions) {
-                queue.add(new Point(x + direction[0], y + direction[1]));
+                int newX = x + direction[0];
+                int newY = y + direction[1];
+                if (newX >= 0 && newX < width && newY >= 0 && newY < height && !visited[newX][newY]) {
+                    queue.add(new Point(newX, newY));
+                    visited[newX][newY] = true;
+                }
             }
         }
     }
