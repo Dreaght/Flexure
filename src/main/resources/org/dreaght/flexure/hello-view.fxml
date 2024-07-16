@@ -26,7 +26,7 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="radius" layoutX="30.0" layoutY="208.0" onKeyReleased="#onRadiusUpdate" prefHeight="26.0" prefWidth="65.0" text="200" />
+      <TextField fx:id="radius" layoutX="30.0" layoutY="208.0" onKeyReleased="#onRadiusUpdate" prefHeight="26.0" prefWidth="65.0" text="50" />
       <Label layoutX="100.0" layoutY="179.0" prefHeight="29.0" prefWidth="65.0" text="Sigma" textFill="WHITE">
          <font>
             <Font size="20.0" />

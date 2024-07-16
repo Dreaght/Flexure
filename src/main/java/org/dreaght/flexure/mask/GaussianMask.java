@@ -2,6 +2,7 @@ package org.dreaght.flexure.mask;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.dreaght.flexure.util.gaussian.BoxGaussianBlur;
 import org.dreaght.flexure.util.gaussian.GaussianBlur;
 
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.util.stream.IntStream;
 @Getter @Setter
 
 public class GaussianMask implements Mask {
-    private int radius = 200;
+    private int radius = 50;
     private int sigma = 45;
     private double arrowLengthCoefficient = 0.000015;
     private double arrowOffsetX = 1;
@@ -20,7 +21,14 @@ public class GaussianMask implements Mask {
 
     @Override
     public BufferedImage update(BufferedImage bufferedImage) {
-        BufferedImage blurredImage = GaussianBlur.applyGaussianBlur(bufferedImage, radius, sigma);
+
+        long startTime = System.currentTimeMillis();
+
+        GaussianBlur gaussianBlur = new BoxGaussianBlur();
+        BufferedImage blurredImage = gaussianBlur.applyGaussianBlur(bufferedImage, radius, sigma);
+
+        System.out.println("Applying has took: " + (System.currentTimeMillis() - startTime));
+
         BufferedImage invertedGaussianImage = invertGaussianField(blurredImage, bufferedImage);
 
         if (shouldRenderVectors) {
