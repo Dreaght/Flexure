@@ -11,36 +11,37 @@
    </style>
    <children>
       <ImageView fx:id="imageView" fitHeight="1080.0" fitWidth="1940.0" onMouseClicked="#onMouseClicked" pickOnBounds="true" preserveRatio="true" />
-      <Label layoutX="30.0" layoutY="26.0" text="Radial coefficient" textFill="WHITE">
+      <Label layoutX="30.0" layoutY="26.0" text="Radial" textFill="WHITE">
          <font>
             <Font size="20.0" />
          </font></Label>
       <TextField fx:id="radialCoefficient" layoutX="30.0" layoutY="55.0" onKeyReleased="#onRadialCoefficientTextFieldUpdate" prefHeight="26.0" prefWidth="104.0" text="0" />
-      <Label layoutX="30.0" layoutY="97.0" text="Central coefficient" textFill="WHITE">
+      <Label layoutX="141.0" layoutY="26.0" text="Central" textFill="WHITE">
          <font>
             <Font size="20.0" />
          </font></Label>
-      <TextField fx:id="centralCoefficient" layoutX="30.0" layoutY="126.0" onKeyReleased="#onCentralCoefficientTextFieldUpdate" prefHeight="26.0" prefWidth="104.0" text="1" />
-      <Label layoutX="30.0" layoutY="179.0" prefHeight="29.0" prefWidth="65.0" text="Radius" textFill="WHITE">
+      <TextField fx:id="centralCoefficient" layoutX="141.0" layoutY="55.0" onKeyReleased="#onCentralCoefficientTextFieldUpdate" prefHeight="26.0" prefWidth="104.0" text="1" />
+      <Label layoutX="30.0" layoutY="81.0" prefHeight="29.0" prefWidth="65.0" text="Radius" textFill="WHITE">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="radius" layoutX="30.0" layoutY="208.0" onKeyReleased="#onRadiusUpdate" prefHeight="26.0" prefWidth="65.0" text="50" />
-      <Label layoutX="100.0" layoutY="179.0" prefHeight="29.0" prefWidth="65.0" text="Sigma" textFill="WHITE">
+      <TextField fx:id="radius" layoutX="30.0" layoutY="110.0" onKeyReleased="#onRadiusUpdate" prefHeight="26.0" prefWidth="65.0" text="50" />
+      <Label layoutX="100.0" layoutY="81.0" prefHeight="29.0" prefWidth="65.0" text="Sigma" textFill="WHITE">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="sigma" layoutX="100.0" layoutY="208.0" onKeyReleased="#onSigmaUpdate" prefHeight="17.0" prefWidth="65.0" text="45" />
+      <TextField fx:id="sigma" layoutX="100.0" layoutY="110.0" onKeyReleased="#onSigmaUpdate" prefHeight="17.0" prefWidth="65.0" text="45" />
       <Slider fx:id="size" layoutY="6.0" onDragDetected="#onSizeSliderMoved" onMouseClicked="#onSizeSliderMoved" onScroll="#onSizeSliderMoved" onSwipeDown="#onSizeSliderMoved" onSwipeUp="#onSizeSliderMoved" prefHeight="6.0" prefWidth="800.0" value="50.0" />
-      <Label layoutX="30.0" layoutY="254.0" prefHeight="26.0" prefWidth="104.0" text="Vector length" textFill="WHITE">
+      <Label layoutX="30.0" layoutY="136.0" prefHeight="26.0" prefWidth="104.0" text="Vector length" textFill="WHITE">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="arrowLength" layoutX="31.0" layoutY="280.0" onKeyReleased="#onGaussianVectorLengthUpdate" prefHeight="29.0" prefWidth="90.0" text="0.000015" />
-      <RadioButton fx:id="renderOption" layoutX="134.0" layoutY="286.0" mnemonicParsing="false" onAction="#onGaussianVectorRenderOptionUpdate" selected="true" text="Render" textFill="WHITE" />
-      <Button fx:id="vectorStateOption" layoutX="31.0" layoutY="320.0" mnemonicParsing="false" onAction="#onGaussianVectorStateOptionUpdate" text="Compression" />
+      <TextField fx:id="arrowLength" layoutX="31.0" layoutY="162.0" onKeyReleased="#onGaussianVectorLengthUpdate" prefHeight="29.0" prefWidth="90.0" text="0.000015" />
+      <RadioButton fx:id="renderOption" layoutX="134.0" layoutY="168.0" mnemonicParsing="false" onAction="#onGaussianVectorRenderOptionUpdate" selected="true" text="Render" textFill="WHITE" />
+      <Button fx:id="vectorStateOption" layoutX="31.0" layoutY="202.0" mnemonicParsing="false" onAction="#onGaussianVectorStateOptionUpdate" text="Compression" />
+      <Button fx:id="export" layoutX="375.0" layoutY="29.0" mnemonicParsing="false" onAction="#onExport" text="Export" />
    </children>
 </Pane>

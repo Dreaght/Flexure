@@ -1,6 +1,5 @@
 package org.dreaght.flexure;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
@@ -13,11 +12,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import lombok.Getter;
+import org.dreaght.flexure.loader.FileLoader;
 import org.dreaght.flexure.loader.ImageLoader;
 import org.dreaght.flexure.mask.GaussianMask;
 import org.dreaght.flexure.mask.ResizeMask;
 import org.dreaght.flexure.mask.VectorisationMask;
 import org.dreaght.flexure.util.ValidatorUtil;
+
+import java.awt.image.BufferedImage;
 
 public class FlexureController {
 
@@ -162,5 +164,12 @@ public class FlexureController {
             FlexureApplication.getInstance().getImageLoader().reloadMasksOnSketch();
             FlexureApplication.getInstance().getImageLoader().drawSketch();
         });
+    }
+
+    @FXML
+    private void onExport() {
+        System.out.println("Exporting the image...");
+        BufferedImage finalImage = FlexureApplication.getInstance().getImageLoader().getSketch();
+        FileLoader.exportFinalImage(finalImage);
     }
 }

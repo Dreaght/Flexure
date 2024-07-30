@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'org.dreaght'
-version '2.1'
+version '2.1.1'
 
 repositories {
   mavenCentral()
@@ -22,10 +22,6 @@ ext {
 
 sourceCompatibility = '17'
 targetCompatibility = '17'
-
-tasks.withType(JavaCompile) {
-  options.encoding = 'UTF-8'
-}
 
 application {
   mainModule = 'org.dreaght.flexure'
@@ -47,6 +43,18 @@ dependencies {
   implementation("com.aspose:aspose-cad:24.3")
 }
 
+tasks.withType(Exec) {
+  environment "JAVA_OPTS", "-Dprism.verbose=true -XX:+ShowCodeDetailsInExceptionMessages"
+}
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+  options.compilerArgs += [
+          '--module-path', classpath.asPath,
+          '--add-modules', 'javafx.controls,javafx.fxml,java.desktop,lombok,aspose.cad'
+  ]
+}
+
 test {
   useJUnitPlatform()
 }
@@ -54,16 +62,11 @@ test {
 jlink {
   imageZip = project.file("${buildDir}/distributions/Flexure-${version}.zip")
   options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
-  addOptions '--add-modules', 'aspose.cad,javafx.controls,javafx.fxml'
+  addOptions '--add-modules', 'javafx.controls,javafx.fxml,java.desktop,org.dreaght.flexure,aspose.cad'
   launcher {
-    name = 'app'
+    name = 'Flexure'
+    jvmArgs = ['-Dprism.verbose=true', '-XX:+ShowCodeDetailsInExceptionMessages']
   }
-  targetPlatform("win") {
-    jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/semeru17-binaries/releases/download/jdk-17.0.11%2B9_openj9-0.44.0/ibm-semeru-open-jdk_x64_windows_17.0.11_9_openj9-0.44.0.zip")
-  }
-//  targetPlatform("mac") {
-//    jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/semeru17-binaries/releases/download/jdk-17.0.11%2B9_openj9-0.44.0/ibm-semeru-open-jdk_aarch64_mac_17.0.11_9_openj9-0.44.0.tar.gz")
-//  }
 }
 
 jlinkZip {
@@ -82,9 +85,11 @@ task jpackageWindows(type: Exec) {
           '--dest', jpackageOutputDir,
           '--name', 'Flexure',
           '--module', 'org.dreaght.flexure/org.dreaght.flexure.FlexureApplication',
+          '--module-path', "${buildDir}/image",
           '--runtime-image', "${buildDir}/image",
-          '--main-class', 'org.dreaght.flexure.FlexureApplication'
-  //    '--icon', 'path/to/icon.ico' // Optional: path to your app icon
+          '--main-class', 'org.dreaght.flexure.FlexureApplication',
+          '--java-options', '-Dprism.verbose=true -XX:+ShowCodeDetailsInExceptionMessages',
+          '--verbose'
 }
 
 task jpackageLinux(type: Exec) {
@@ -97,9 +102,11 @@ task jpackageLinux(type: Exec) {
           '--dest', jpackageOutputDir,
           '--name', 'Flexure',
           '--module', 'org.dreaght.flexure/org.dreaght.flexure.FlexureApplication',
+          '--module-path', "${buildDir}/image",
           '--runtime-image', "${buildDir}/image",
-          '--main-class', 'org.dreaght.flexure.FlexureApplication'
-  //    '--icon', 'path/to/icon.png' // Optional: path to your app icon
+          '--main-class', 'org.dreaght.flexure.FlexureApplication',
+          '--java-options', '-Dprism.verbose=true -XX:+ShowCodeDetailsInExceptionMessages',
+          '--verbose'
 }
 
 task jpackageMac(type: Exec) {
@@ -112,12 +119,13 @@ task jpackageMac(type: Exec) {
           '--dest', jpackageOutputDir,
           '--name', 'Flexure',
           '--module', 'org.dreaght.flexure/org.dreaght.flexure.FlexureApplication',
+          '--module-path', "${buildDir}/image",
           '--runtime-image', "${buildDir}/image",
-          '--main-class', 'org.dreaght.flexure.FlexureApplication'
-  //    '--icon', 'path/to/icon.icns' // Optional: path to your app icon
+          '--main-class', 'org.dreaght.flexure.FlexureApplication',
+          '--java-options', '-Dprism.verbose=true -XX:+ShowCodeDetailsInExceptionMessages',
+          '--verbose'
 }
 
-// Define a task to run all jpackage tasks
 task jpackageAll {
   dependsOn jpackageWindows, jpackageLinux, jpackageMac
 }

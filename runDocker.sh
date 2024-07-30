@@ -5,22 +5,22 @@ set -e
 # Function to install Docker on Linux
 install_docker_linux() {
   echo "Installing Docker on Linux..."
-  if ! command -v docker &> /dev/null; then
-    if command -v yum &> /dev/null; then
-      sudo yum install -y docker
-    elif command -v apt-get &> /dev/null; then
-      sudo apt-get update
-      sudo apt-get install -y docker.io
-    elif command -v pacman &> /dev/null; then
-      yes '' | sudo pacman -S docker
-    else
-      echo "Unsupported package manager. Please install Docker manually."
-      exit 1
-    fi
+  if command -v yum &> /dev/null; then
+    sudo yum install -y docker
+  elif command -v apt-get &> /dev/null; then
+    echo "Debian-like OS detected!"
+    sudo apt-get update
+    sudo apt-get install -y docker.io
+  elif command -v pacman &> /dev/null; then
+    yes '' | sudo pacman -S docker
+  else
+    echo "Unsupported package manager. Please install Docker manually."
+    exit 1
   fi
 
   if ! systemctl is-active --quiet docker; then
     echo "Starting Docker daemon..."
+    sudo systemctl daemon-reload
     sudo systemctl start docker
   fi
 
@@ -83,14 +83,14 @@ install_docker_windows() {
 run_javafx_app() {
   echo "Creating Dockerfile for JavaFX application..."
 
-  read -p "Enter the path to the file you want to copy into the Docker container: " file_path
-
-  if [[ ! -f "$file_path" ]]; then
-    echo "File not found!"
-    exit 1
-  fi
-
-  file_name=$(basename "$file_path")
+#  read -p "Enter the path to the file you want to copy into the Docker container: " file_path
+#
+#  if [[ ! -f "$file_path" ]]; then
+#    echo "File not found!"
+#    exit 1
+#  fi
+#
+#  file_name=$(basename "$file_path")
 
   cat <<EOF > Dockerfile
 FROM ubuntu:20.04
@@ -119,18 +119,24 @@ COPY build.gradle /usr/src/app/build.gradle
 COPY settings.gradle /usr/src/app/settings.gradle
 COPY src /usr/src/app/src
 
-COPY $file_name /usr/src/app/
+#COPY $file_name /usr/src/app/
 
 RUN chmod +x /usr/src/app/gradlew
 
-CMD ["./gradlew", "run"]
+RUN readlink -f ./gradlew
+#CMD ["/usr/src/app/gradlew", "run"]
+
+RUN apt-get install -y dos2unix
+RUN dos2unix /usr/src/app/gradlew
+
+RUN sh /usr/src/app/gradlew run
 EOF
 
-  cp "$file_path" .
+#  cp "$file_path" .
 
-  docker build -t javafx-app .
+  DOCKER_BUILDKIT=0 docker build -t javafx-app .
 
-  rm "$file_name"
+#  rm "$file_name"
 
   echo "Docker image built successfully. Running the JavaFX application..."
 

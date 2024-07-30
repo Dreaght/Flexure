@@ -28,34 +28,37 @@ public class FlexureApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-
-        instance = this;
-        this.stage = stage;
-
-        fxmlLoader = new FXMLLoader(FlexureApplication.class.getResource("hello-view.fxml"));
-
-        Scene scene = null;
         try {
-            scene = new Scene(fxmlLoader.load());
-        } catch (IOException e) {
-            System.out.println("Failed to load the scene!");
-        }
+            instance = this;
+            this.stage = stage;
 
-        assert scene != null;
-        scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ESCAPE) {
-                stage.close();
+            fxmlLoader = new FXMLLoader(FlexureApplication.class.getResource("hello-view.fxml"));
+
+            Scene scene = null;
+            try {
+                scene = new Scene(fxmlLoader.load());
+            } catch (IOException e) {
+                System.out.println("Failed to load the scene!");
             }
-        });
 
-        setStageProperties(stage, scene);
+            assert scene != null;
+            scene.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    stage.close();
+                }
+            });
 
-        applicationLifecycle = new ApplicationLifecycle();
-        applicationLifecycle.start(this, stage);
+            setStageProperties(stage, scene);
+
+            applicationLifecycle = new ApplicationLifecycle();
+            applicationLifecycle.start(this, stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setStageProperties(Stage stage, Scene scene) {
-        stage.setOpacity(.6);
+        stage.setOpacity(.8);
 
         stage.setMinWidth(800);
         stage.setMinHeight(800);

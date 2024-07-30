@@ -19,7 +19,12 @@ public class BufferedUtil {
     }
 
     public BufferedImage convertToBuffer(float targetWidth, float targetHeight) throws IOException {
-        return biStrategy.convertToBuffer(targetWidth, targetHeight);
+        try {
+            return biStrategy.convertToBuffer(targetWidth, targetHeight);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static BufferedImage createEmpty(int width, int height) {

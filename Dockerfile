@@ -24,8 +24,11 @@ COPY build.gradle /usr/src/app/build.gradle
 COPY settings.gradle /usr/src/app/settings.gradle
 COPY src /usr/src/app/src
 
-COPY aim1.dxf /usr/src/app/
-
 RUN chmod +x /usr/src/app/gradlew
 
-CMD ["./gradlew", "run"]
+RUN readlink -f ./gradlew
+
+RUN apt-get install -y dos2unix
+RUN dos2unix /usr/src/app/gradlew
+
+RUN sh /usr/src/app/gradlew run

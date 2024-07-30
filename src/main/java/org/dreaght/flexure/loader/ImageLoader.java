@@ -24,11 +24,14 @@ public class ImageLoader {
 
     private BufferedImage sketch;
     private BufferedImage sourceSketch;
+    private BufferedImage sourceSketchThatWasMasked;
 
     private int sketchStartX = 0;
     private int sketchStartY = 0;
 
     private List<Mask> masks;
+
+    private boolean hasAlreadyRendered = false;
 
     public ImageLoader(FlexureApplication flexureApplication, BufferedImage screenLayer, BufferedImage sketch, List<Mask> masks) {
         this.flexureApplication = flexureApplication;
@@ -48,6 +51,11 @@ public class ImageLoader {
             newSketch = mask.update(newSketch);
         }
         sketch = newSketch;
+
+        if (!hasAlreadyRendered) {
+            this.sourceSketchThatWasMasked = BufferedUtil.copyImage(sketch);
+            hasAlreadyRendered = true;
+        }
     }
 
     public void drawImage(BufferedImage bufferedImage) {
@@ -68,6 +76,7 @@ public class ImageLoader {
         screenLayer = BufferedUtil.createEmpty(screenLayer.getWidth(), screenLayer.getHeight());
 
         Graphics2D g = screenLayer.createGraphics();
+        g.drawImage(sourceSketchThatWasMasked, sketchStartX, sketchStartY, sketch.getWidth(), sketch.getHeight(), null);
         g.drawImage(sketch, sketchStartX, sketchStartY, sketch.getWidth(), sketch.getHeight(), null);
         g.dispose();
 
