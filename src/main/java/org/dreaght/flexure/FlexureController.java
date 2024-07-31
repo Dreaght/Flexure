@@ -41,6 +41,8 @@ public class FlexureController {
     private RadioButton renderOption;
     @FXML
     private Button vectorStateOption;
+    @FXML
+    private RadioButton showInputLayer;
 
     @FXML
     protected void onMouseClicked(MouseEvent event) {
@@ -160,10 +162,14 @@ public class FlexureController {
             ((GaussianMask) mask).setArrowOffsetY(vectorStateOption.getText().equals("Compression") ? -1 : 1);
             ((GaussianMask) mask).setArrowLengthCoefficient(Double.parseDouble(arrowLength.getText()));
             ((GaussianMask) mask).setShouldRenderVectors(renderOption.isSelected());
-
-            FlexureApplication.getInstance().getImageLoader().reloadMasksOnSketch();
-            FlexureApplication.getInstance().getImageLoader().drawSketch();
         });
+
+        reloadRenderedImage();
+    }
+
+    private void reloadRenderedImage() {
+        FlexureApplication.getInstance().getImageLoader().reloadMasksOnSketch();
+        FlexureApplication.getInstance().getImageLoader().drawSketch();
     }
 
     @FXML
@@ -171,5 +177,11 @@ public class FlexureController {
         System.out.println("Exporting the image...");
         BufferedImage finalImage = FlexureApplication.getInstance().getImageLoader().getSketch();
         FileLoader.exportFinalImage(finalImage);
+    }
+
+    @FXML
+    private void onShowInputLayer() {
+        FlexureApplication.getInstance().getImageLoader().setShowInputLayer(showInputLayer.isSelected());
+        reloadRenderedImage();
     }
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.dreaght.flexure.FlexureApplication;
 import org.dreaght.flexure.FlexureController;
+import org.dreaght.flexure.mask.GaussianMask;
 import org.dreaght.flexure.mask.Mask;
 import org.dreaght.flexure.util.buffer.BufferedUtil;
 
@@ -17,13 +18,13 @@ import java.util.List;
 @Getter @Setter
 public class ImageLoader {
 
-    private FlexureApplication flexureApplication;
+    private final FlexureApplication flexureApplication;
 
     private BufferedImage sourceScreenLayer;
     private BufferedImage screenLayer;
 
     private BufferedImage sketch;
-    private BufferedImage sourceSketch;
+    private final BufferedImage sourceSketch;
     private BufferedImage sourceSketchThatWasMasked;
 
     private int sketchStartX = 0;
@@ -32,6 +33,7 @@ public class ImageLoader {
     private List<Mask> masks;
 
     private boolean hasAlreadyRendered = false;
+    private boolean showInputLayer = true;
 
     public ImageLoader(FlexureApplication flexureApplication, BufferedImage screenLayer, BufferedImage sketch, List<Mask> masks) {
         this.flexureApplication = flexureApplication;
@@ -39,6 +41,7 @@ public class ImageLoader {
         this.masks = masks;
         this.sourceSketch = sketch;
         this.sketch = BufferedUtil.copyImage(sourceSketch);
+        this.sourceSketchThatWasMasked = BufferedUtil.copyImage(sourceSketch);
 
         sketchStartX = (screenLayer.getWidth() / 2) - (sketch.getWidth() / 2);
         sketchStartY = (screenLayer.getHeight() / 2) - (sketch.getHeight() / 2);
@@ -48,6 +51,16 @@ public class ImageLoader {
         BufferedImage newSketch = BufferedUtil.copyImage(sourceSketch);
 
         for (Mask mask : masks) {
+            if (!hasAlreadyRendered && mask instanceof GaussianMask) {
+                boolean shouldReturnVectorsRenderOptionBack = ((GaussianMask) mask).isShouldRenderVectors();
+
+                ((GaussianMask) mask).setShouldRenderVectors(false);
+                newSketch = mask.update(newSketch);
+
+                ((GaussianMask) mask).setShouldRenderVectors(shouldReturnVectorsRenderOptionBack);
+                continue;
+            }
+
             newSketch = mask.update(newSketch);
         }
         sketch = newSketch;
@@ -58,7 +71,11 @@ public class ImageLoader {
         }
     }
 
-    public void drawImage(BufferedImage bufferedImage) {
+    public void drawImage(BufferedImage image) {
+        drawImage(image, 255);
+    }
+
+    public void drawImage(BufferedImage bufferedImage, int alpha) {
         WritableImage writableImage = new WritableImage(bufferedImage.getWidth(), bufferedImage.getHeight());
         PixelWriter pixelWriter = writableImage.getPixelWriter();
 
@@ -76,10 +93,18 @@ public class ImageLoader {
         screenLayer = BufferedUtil.createEmpty(screenLayer.getWidth(), screenLayer.getHeight());
 
         Graphics2D g = screenLayer.createGraphics();
-        g.drawImage(sourceSketchThatWasMasked, sketchStartX, sketchStartY, sketch.getWidth(), sketch.getHeight(), null);
         g.drawImage(sketch, sketchStartX, sketchStartY, sketch.getWidth(), sketch.getHeight(), null);
         g.dispose();
 
         drawImage(screenLayer);
+
+        if (showInputLayer) {
+            BufferedImage markedSketch = BufferedUtil.copyImage(screenLayer);
+            Graphics2D g2 = markedSketch.createGraphics();
+            g2.drawImage(sourceSketchThatWasMasked, sketchStartX, sketchStartY, sketch.getWidth(), sketch.getHeight(), null);
+            g2.dispose();
+
+            drawImage(markedSketch, 100);
+        }
     }
 }
