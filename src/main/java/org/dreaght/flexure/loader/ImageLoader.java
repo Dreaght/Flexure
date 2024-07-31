@@ -7,8 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.dreaght.flexure.FlexureApplication;
 import org.dreaght.flexure.FlexureController;
-import org.dreaght.flexure.mask.GaussianMask;
-import org.dreaght.flexure.mask.Mask;
+import org.dreaght.flexure.mask.*;
 import org.dreaght.flexure.util.buffer.BufferedUtil;
 
 import java.awt.*;
@@ -51,13 +50,8 @@ public class ImageLoader {
         BufferedImage newSketch = BufferedUtil.copyImage(sourceSketch);
 
         for (Mask mask : masks) {
-            if (!hasAlreadyRendered && mask instanceof GaussianMask) {
-                boolean shouldReturnVectorsRenderOptionBack = ((GaussianMask) mask).isShouldRenderVectors();
-
-                ((GaussianMask) mask).setShouldRenderVectors(false);
-                newSketch = mask.update(newSketch);
-
-                ((GaussianMask) mask).setShouldRenderVectors(shouldReturnVectorsRenderOptionBack);
+            if (!hasAlreadyRendered && !((mask instanceof FillMask) ||
+                    (mask instanceof ResizeMask) || mask instanceof InvertColorMask)) {
                 continue;
             }
 

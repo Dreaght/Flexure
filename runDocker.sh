@@ -132,11 +132,7 @@ RUN dos2unix /usr/src/app/gradlew
 RUN sh /usr/src/app/gradlew run
 EOF
 
-#  cp "$file_path" .
-
   DOCKER_BUILDKIT=0 docker build -t javafx-app .
-
-#  rm "$file_name"
 
   echo "Docker image built successfully. Running the JavaFX application..."
 

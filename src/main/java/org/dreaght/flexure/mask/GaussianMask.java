@@ -15,8 +15,8 @@ public class GaussianMask implements Mask {
     private int radius = 50;
     private int sigma = 45;
     private double arrowLengthCoefficient = 0.000015;
-    private double arrowOffsetX = 1;
-    private double arrowOffsetY = -1;
+    private double arrowOffsetX = -1;
+    private double arrowOffsetY = 1;
     private boolean shouldRenderVectors = true;
 
     @Override

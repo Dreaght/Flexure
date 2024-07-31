@@ -41,7 +41,7 @@
       </Label>
       <TextField fx:id="arrowLength" layoutX="31.0" layoutY="162.0" onKeyReleased="#onGaussianVectorLengthUpdate" prefHeight="29.0" prefWidth="90.0" text="0.000015" />
       <RadioButton fx:id="renderOption" layoutX="134.0" layoutY="168.0" mnemonicParsing="false" onAction="#onGaussianVectorRenderOptionUpdate" selected="true" text="Render" textFill="WHITE" />
-      <Button fx:id="vectorStateOption" layoutX="31.0" layoutY="202.0" mnemonicParsing="false" onAction="#onGaussianVectorStateOptionUpdate" text="Compression" />
+      <Button fx:id="vectorStateOption" layoutX="31.0" layoutY="202.0" mnemonicParsing="false" onAction="#onGaussianVectorStateOptionUpdate" text="Expansion" />
       <Button fx:id="export" layoutX="375.0" layoutY="29.0" mnemonicParsing="false" onAction="#onExport" text="Export" />
       <RadioButton fx:id="showInputLayer" layoutX="140.0" layoutY="203.0" mnemonicParsing="false" onAction="#onShowInputLayer" selected="true" text="Show input layer" textFill="WHITE" />
    </children>
