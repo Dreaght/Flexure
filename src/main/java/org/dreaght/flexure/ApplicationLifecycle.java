@@ -41,6 +41,7 @@ public class ApplicationLifecycle {
                         new FillMask(),
                         new ResizeMask(),
                         new InvertColorMask(),
+                        new VectorisationMask(),
                         new GaussianMask()
                 ));
 
