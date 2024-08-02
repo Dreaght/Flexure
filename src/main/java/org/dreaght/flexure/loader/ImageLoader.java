@@ -61,6 +61,7 @@ public class ImageLoader {
 
         if (!hasAlreadyRendered) {
             this.sourceSketchThatWasMasked = BufferedUtil.copyImage(sketch);
+            this.sourceSketchThatWasMasked = new BorderMask().update(this.sourceSketchThatWasMasked);
             hasAlreadyRendered = true;
         }
     }
