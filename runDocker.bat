@@ -1,69 +1,74 @@
 @echo off
-setlocal enabledelayedexpansion
+setlocal
 
+REM Set the path for Docker Desktop installer
+set DOCKER_INSTALLER_URL=https://desktop.docker.com/win/stable/Docker%20Desktop%20Installer.exe
+set DOCKER_INSTALLER=DockerDesktopInstaller.exe
 
-call :run_javafx_app
+REM Download Docker Desktop installer
+echo Downloading Docker Desktop installer...
+curl -LO %DOCKER_INSTALLER_URL%
 
-goto :eof
+REM Install Docker Desktop
+echo Installing Docker Desktop...
+start /wait "" "%DOCKER_INSTALLER%" install
 
-:: Function to build Docker image and run the JavaFX application
-:run_javafx_app
-echo Creating Dockerfile for JavaFX application...
-
-set /p file_path="Enter the path to the file you want to copy into the Docker container: "
-
-if not exist "%file_path%" (
-    echo File not found!
+REM Check if Docker is installed
+where docker >nul 2>nul
+if %ERRORLEVEL% neq 0 (
+    echo Docker Desktop installation failed. Please install Docker manually and try again.
     exit /b 1
 )
 
-for %%I in ("%file_path%") do set file_name=%%~nxI
+REM Verify Docker installation
+docker --version
+
+REM Create Dockerfile for JavaFX application
+echo Creating Dockerfile for JavaFX application...
 
 (
-    echo FROM ubuntu:20.04
-    echo.
-    echo RUN apt-get update ^&^& apt-get install -y \^
-    echo     openjdk-17-jdk \^
-    echo     wget \^
-    echo     unzip \^
-    echo     libgtk-3-0 \^
-    echo     libcanberra-gtk-module \^
-    echo     libcanberra-gtk3-module
-    echo.
-    echo RUN wget https://services.gradle.org/distributions/gradle-8.7-bin.zip -P /tmp \^
-    echo     ^&^& unzip -d /opt/gradle /tmp/gradle-8.7-bin.zip \^
-    echo     ^&^& rm /tmp/gradle-8.7-bin.zip
-    echo.
-    echo ENV GRADLE_HOME=/opt/gradle/gradle-8.7
-    echo ENV PATH=\${GRADLE_HOME}/bin:\${PATH}
-    echo.
-    echo WORKDIR /usr/src/app
-    echo.
-    echo COPY gradlew /usr/src/app/gradlew
-    echo COPY gradlew.bat /usr/src/app/gradlew.bat
-    echo COPY gradle /usr/src/app/gradle
-    echo COPY build.gradle /usr/src/app/build.gradle
-    echo COPY settings.gradle /usr/src/app/settings.gradle
-    echo COPY src /usr/src/app/src
-    echo.
-    echo COPY %file_name% /usr/src/app/
-    echo.
-    echo RUN chmod +x /usr/src/app/gradlew
-    echo.
-    echo CMD ["./gradlew", "run"]
+echo FROM ubuntu:20.04
+echo.
+echo RUN apt-get update && apt-get install -y ^\
+echo     openjdk-17-jdk ^\
+echo     wget ^\
+echo     unzip ^\
+echo     libgtk-3-0 ^\
+echo     libcanberra-gtk-module ^\
+echo     libcanberra-gtk3-module
+echo.
+echo RUN wget https://services.gradle.org/distributions/gradle-8.7-bin.zip -P /tmp ^\
+echo     && unzip -d /opt/gradle /tmp/gradle-8.7-bin.zip ^\
+echo     && rm /tmp/gradle-8.7-bin.zip
+echo.
+echo ENV GRADLE_HOME=/opt/gradle/gradle-8.7
+echo ENV PATH=%GRADLE_HOME%/bin:%PATH%
+echo.
+echo WORKDIR /usr/src/app
+echo.
+echo COPY gradlew /usr/src/app/gradlew
+echo COPY gradlew.bat /usr/src/app/gradlew.bat
+echo COPY gradle /usr/src/app/gradle
+echo COPY build.gradle /usr/src/app/build.gradle
+echo COPY settings.gradle /usr/src/app/settings.gradle
+echo COPY src /usr/src/app/src
+echo.
+echo RUN chmod +x /usr/src/app/gradlew
+echo.
+echo CMD ["./gradlew", "run"]
 ) > Dockerfile
 
-copy "%file_path%" .
-
+REM Build Docker image
+echo Building Docker image...
 docker build -t javafx-app .
 
-del "%file_name%"
+REM Run JavaFX application in Docker
+echo Running JavaFX application in Docker...
 
-echo Docker image built successfully. Running the JavaFX application...
-
-:: Replace this command with the actual command to launch your JavaFX application inside the container
+REM Map the Windows user directory to the container
 docker run -it --rm ^
-    -v /c/Users:/c/Users ^
+    -e DISPLAY=%DISPLAY% ^
+    -v C:/Users:/mnt/host_users ^
     javafx-app
 
-goto :eof
+endlocal
