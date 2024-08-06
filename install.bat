@@ -5,6 +5,12 @@ set REPO_URL=https://github.com/Dreaght/Flexure/archive/refs/heads/master.zip
 set ZIP_FILE=Flexure-master.zip
 set DIR_NAME=Flexure-master
 
+echo Removing existing directory if it exists...
+if exist %DIR_NAME% rd /s /q %DIR_NAME%
+
+echo Removing existing ZIP file if it exists...
+if exist %ZIP_FILE% del /q %ZIP_FILE%
+
 echo Downloading repository using PowerShell...
 powershell -Command "Invoke-WebRequest -Uri %REPO_URL% -OutFile %ZIP_FILE%"
 
