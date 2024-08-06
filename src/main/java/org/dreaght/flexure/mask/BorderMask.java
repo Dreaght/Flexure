@@ -9,7 +9,14 @@ public class BorderMask implements Mask {
     private static final Color LIGHT_GREEN = new Color(144, 238, 144);
     private static final Color BLACK = Color.BLACK;
     private static final Color WHITE = Color.WHITE;
+    private Color maskColor = LIGHT_GREEN;
     private static final int BORDER_RADIUS = 3;
+
+    public BorderMask() {}
+
+    public BorderMask(Color color) {
+        maskColor = color;
+    }
 
     @Override
     public BufferedImage update(BufferedImage image) {
@@ -22,7 +29,7 @@ public class BorderMask implements Mask {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (isBorderPixel(newImage, x, y, width, height)) {
-                    newImage.setRGB(x, y, LIGHT_GREEN.getRGB());
+                    newImage.setRGB(x, y, maskColor.getRGB());
                 }
             }
         }
@@ -54,7 +61,7 @@ public class BorderMask implements Mask {
     }
 
     private boolean isBlack(int rgb) {
-        Color color = new Color(rgb, true); // true for alpha channel
+        Color color = new Color(rgb, true);
         return color.equals(BLACK);
     }
 

@@ -8,6 +8,7 @@ import org.dreaght.flexure.loader.ImageLoader;
 import org.dreaght.flexure.mask.*;
 import org.dreaght.flexure.util.buffer.BufferedUtil;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
@@ -42,7 +43,12 @@ public class ApplicationLifecycle {
                         new ResizeMask(),
                         new InvertColorMask(),
                         new VectorisationMask(),
-                        new GaussianMask()
+                        new GaussianMask(),
+                        new RemoveNonWhite(),
+                        new GaussianMask(),
+                        new GoodbyeHolesMask(),
+                        new BorderMask(new Color(144, 238, 144)),
+                        new RemoveEverythingExceptMask(new Color(144, 238, 144))
                 ));
 
         app.setImageLoader(imageLoaderTemp);
