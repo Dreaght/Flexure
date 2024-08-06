@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class BorderMask implements Mask {
-    private static final Color LIGHT_GREEN = new Color(144, 238, 144);
+    private static final Color LIGHT_GREEN = new Color(0, 0, 144);
     private static final Color BLACK = Color.BLACK;
     private static final Color WHITE = Color.WHITE;
     private Color maskColor = LIGHT_GREEN;
