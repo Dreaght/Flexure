@@ -1,9 +1,10 @@
 @echo off
 setlocal
 
-set REPO_URL=https://github.com/Dreaght/Flexure/archive/refs/heads/master.zip
-set ZIP_FILE=Flexure-master.zip
-set DIR_NAME=Flexure-master
+set BRANCH=master
+set REPO_URL="https://github.com/Dreaght/Flexure/archive/refs/heads/%BRANCH%.zip"
+set ZIP_FILE="Flexure-%BRANCH%.zip"
+set DIR_NAME="Flexure-%BRANCH%"
 
 echo Removing existing directory if it exists...
 if exist %DIR_NAME% rd /s /q %DIR_NAME%

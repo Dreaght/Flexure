@@ -1,8 +1,9 @@
 #!/bin/bash
 
-REPO_URL="https://github.com/Dreaght/Flexure/archive/refs/heads/master.zip"
-ZIP_FILE="Flexure-master.zip"
-DIR_NAME="Flexure-master"
+BRANCH="master"
+REPO_URL="https://github.com/Dreaght/Flexure/archive/refs/heads/$BRANCH.zip"
+ZIP_FILE="Flexure-$BRANCH.zip"
+DIR_NAME="Flexure-$BRANCH"
 
 if [ -d "$DIR_NAME" ]; then
     echo "Removing existing directory $DIR_NAME..."
