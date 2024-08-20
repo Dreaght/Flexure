@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.stage.Stage;
 import lombok.Getter;
 import org.dreaght.flexure.loader.FileLoader;
@@ -25,6 +26,12 @@ public class FlexureController {
 
     @FXML @Getter
     private ImageView imageView;
+    private double imageScale = 1.0;
+    private double imageOffsetX = 0;
+    private double imageOffsetY = 0;
+    private double dragAnchorX;
+    private double dragAnchorY;
+
     @FXML
     private TextField radialCoefficient;
     @FXML
@@ -43,6 +50,34 @@ public class FlexureController {
     private Button vectorStateOption;
     @FXML
     private RadioButton showInputLayer;
+
+    @FXML
+    private void handleScroll(ScrollEvent event) {
+        double delta = event.getDeltaY();
+        if (delta > 0) {
+            imageScale *= 1.1;  // Zoom in
+        } else {
+            imageScale *= 0.9;  // Zoom out
+        }
+        imageView.setScaleX(imageScale);
+        imageView.setScaleY(imageScale);
+    }
+
+    // Storing the initial mouse press coordinates
+    @FXML
+    private void handleMousePressed(MouseEvent event) {
+        dragAnchorX = event.getSceneX() - imageOffsetX;
+        dragAnchorY = event.getSceneY() - imageOffsetY;
+    }
+
+    // Dragging the image by adjusting its translation based on mouse movement
+    @FXML
+    private void handleMouseDragged(MouseEvent event) {
+        imageOffsetX = event.getSceneX() - dragAnchorX;
+        imageOffsetY = event.getSceneY() - dragAnchorY;
+        imageView.setTranslateX(imageOffsetX);
+        imageView.setTranslateY(imageOffsetY);
+    }
 
     @FXML
     protected void onMouseClicked(MouseEvent event) {

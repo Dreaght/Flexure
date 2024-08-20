@@ -2,12 +2,18 @@
 setlocal
 
 REM Set the path for Docker Desktop installer
-set DOCKER_INSTALLER_URL=https://desktop.docker.com/win/stable/Docker%20Desktop%20Installer.exe
-set DOCKER_INSTALLER=DockerDesktopInstaller.exe
+set "DOCKER_INSTALLER_URL=https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe"
+set "DOCKER_INSTALLER=DockerDesktopInstaller.exe"
 
-REM Download Docker Desktop installer
+REM Download Docker Desktop installer using curl
 echo Downloading Docker Desktop installer...
-curl -LO %DOCKER_INSTALLER_URL%
+cmd.exe /c curl -L -o %DOCKER_INSTALLER% %DOCKER_INSTALLER_URL%
+
+REM Check if Docker Desktop installer was downloaded
+if not exist "%DOCKER_INSTALLER%" (
+    echo Docker Desktop installer could not be downloaded.
+    exit /b 1
+)
 
 REM Install Docker Desktop
 echo Installing Docker Desktop...
