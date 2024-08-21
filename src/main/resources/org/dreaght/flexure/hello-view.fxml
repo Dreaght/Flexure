@@ -10,7 +10,7 @@
       -fx-background-color: rgba(0, 0, 0); <!-- This sets the background to black with 50% opacity -->
    </style>
    <children>
-      <ImageView fx:id="imageView" fitHeight="1080.0" fitWidth="1940.0" onMouseClicked="#onMouseClicked" onMouseDragged="#handleMouseDragged" onMousePressed="#handleMousePressed" onScroll="#handleScroll" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="imageView" fitHeight="2000.0" fitWidth="3800.0" onMouseClicked="#onMouseClicked" onMouseDragged="#handleMouseDragged" onMousePressed="#handleMousePressed" onScroll="#handleScroll" pickOnBounds="true" preserveRatio="true" />
       <Label layoutX="30.0" layoutY="26.0" text="Radial" textFill="WHITE">
          <font>
             <Font size="20.0" />
@@ -44,5 +44,12 @@
       <Button fx:id="vectorStateOption" layoutX="31.0" layoutY="202.0" mnemonicParsing="false" onAction="#onGaussianVectorStateOptionUpdate" text="Expansion" />
       <Button fx:id="export" layoutX="375.0" layoutY="29.0" mnemonicParsing="false" onAction="#onExport" text="Export" />
       <RadioButton fx:id="showInputLayer" layoutX="140.0" layoutY="203.0" mnemonicParsing="false" onAction="#onShowInputLayer" selected="true" text="Show input layer" textFill="WHITE" />
+      <Label layoutX="30.0" layoutY="227.0" prefHeight="30.0" prefWidth="104.0" text="Stretch X/Y" textFill="WHITE">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="stretch_X" layoutX="30.0" layoutY="257.0" onKeyReleased="#onStretchUpdate" prefHeight="26.0" prefWidth="39.0" text="1" />
+      <TextField fx:id="stretch_Y" layoutX="76.0" layoutY="258.0" onKeyReleased="#onStretchUpdate" prefHeight="25.0" prefWidth="39.0" text="1" />
    </children>
 </Pane>

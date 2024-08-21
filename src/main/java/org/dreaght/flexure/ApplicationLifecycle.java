@@ -48,7 +48,8 @@ public class ApplicationLifecycle {
                         new GaussianMask(),
                         new GoodbyeHolesMask(),
                         new BorderMask(new Color(144, 238, 144)),
-                        new RemoveEverythingExceptMask(new Color(144, 238, 144))
+                        new RemoveEverythingExceptMask(new Color(144, 238, 144)),
+                        new StretchingMask()
                 ));
 
         app.setImageLoader(imageLoaderTemp);

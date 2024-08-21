@@ -17,6 +17,7 @@ import org.dreaght.flexure.loader.FileLoader;
 import org.dreaght.flexure.loader.ImageLoader;
 import org.dreaght.flexure.mask.GaussianMask;
 import org.dreaght.flexure.mask.ResizeMask;
+import org.dreaght.flexure.mask.StretchingMask;
 import org.dreaght.flexure.mask.VectorisationMask;
 import org.dreaght.flexure.util.ValidatorUtil;
 
@@ -50,6 +51,10 @@ public class FlexureController {
     private Button vectorStateOption;
     @FXML
     private RadioButton showInputLayer;
+    @FXML
+    private TextField stretch_X;
+    @FXML
+    private TextField stretch_Y;
 
     @FXML
     private void handleScroll(ScrollEvent event) {
@@ -218,5 +223,22 @@ public class FlexureController {
     private void onShowInputLayer() {
         FlexureApplication.getInstance().getImageLoader().setShowInputLayer(showInputLayer.isSelected());
         reloadRenderedImage();
+    }
+
+    @FXML
+    private void onStretchUpdate(KeyEvent event) {
+        if (event.getCode() != KeyCode.ENTER || event.getText().isEmpty()) {
+            return;
+        }
+        if (!ValidatorUtil.isNumbers(stretch_X.getText(), stretch_Y.getText())) {
+            return;
+        }
+
+        FlexureApplication.getInstance().getImageLoader().getMasks().stream().filter(mask -> mask instanceof StretchingMask).forEach(mask -> {
+            ((StretchingMask) mask).setStretch_X((int) Double.parseDouble(stretch_X.getText()));
+            ((StretchingMask) mask).setStretch_Y((int) Double.parseDouble(stretch_Y.getText()));
+            FlexureApplication.getInstance().getImageLoader().reloadMasksOnSketch();
+            FlexureApplication.getInstance().getImageLoader().drawSketch();
+        });
     }
 }

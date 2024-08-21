@@ -1,6 +1,7 @@
 package org.dreaght.flexure.util.buffer;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 import java.io.File;
@@ -140,5 +141,27 @@ public class BufferedUtil {
         g.dispose();
 
         return b;
+    }
+
+    public static BufferedImage stretchImage(BufferedImage bufferedImage, double X, double Y) {
+        int originalWidth = bufferedImage.getWidth();
+        int originalHeight = bufferedImage.getHeight();
+
+        int newWidth = (int) (originalWidth * X);
+        int newHeight = (int) (originalHeight * Y);
+
+        BufferedImage stretchedImage = new BufferedImage(newWidth, newHeight, bufferedImage.getType());
+
+        Graphics2D g2d = stretchedImage.createGraphics();
+
+        AffineTransform transform = new AffineTransform();
+        transform.scale(X, Y);
+
+        g2d.drawImage(bufferedImage, transform, null);
+        g2d.dispose();
+
+        System.out.println(stretchedImage.getWidth() + " " + stretchedImage.getHeight());
+
+        return stretchedImage;
     }
 }

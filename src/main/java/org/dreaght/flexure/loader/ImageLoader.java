@@ -85,7 +85,7 @@ public class ImageLoader {
     }
 
     public void drawSketch() {
-        screenLayer = BufferedUtil.createEmpty(screenLayer.getWidth(), screenLayer.getHeight());
+        screenLayer = BufferedUtil.createEmpty(4000, 4000);
 
         Graphics2D g = screenLayer.createGraphics();
         g.drawImage(sketch, sketchStartX, sketchStartY, sketch.getWidth(), sketch.getHeight(), null);
