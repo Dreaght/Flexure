@@ -160,8 +160,6 @@ public class BufferedUtil {
         g2d.drawImage(bufferedImage, transform, null);
         g2d.dispose();
 
-        System.out.println(stretchedImage.getWidth() + " " + stretchedImage.getHeight());
-
         return stretchedImage;
     }
 }

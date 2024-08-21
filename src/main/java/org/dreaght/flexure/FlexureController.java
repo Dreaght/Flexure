@@ -235,8 +235,8 @@ public class FlexureController {
         }
 
         FlexureApplication.getInstance().getImageLoader().getMasks().stream().filter(mask -> mask instanceof StretchingMask).forEach(mask -> {
-            ((StretchingMask) mask).setStretch_X((int) Double.parseDouble(stretch_X.getText()));
-            ((StretchingMask) mask).setStretch_Y((int) Double.parseDouble(stretch_Y.getText()));
+            ((StretchingMask) mask).setStretch_X(Double.parseDouble(stretch_X.getText()));
+            ((StretchingMask) mask).setStretch_Y(Double.parseDouble(stretch_Y.getText()));
             FlexureApplication.getInstance().getImageLoader().reloadMasksOnSketch();
             FlexureApplication.getInstance().getImageLoader().drawSketch();
         });
