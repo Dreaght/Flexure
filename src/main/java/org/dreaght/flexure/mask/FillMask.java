@@ -1,20 +1,35 @@
 package org.dreaght.flexure.mask;
 
+import javafx.util.Pair;
 import org.dreaght.flexure.util.buffer.BufferedUtil;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class FillMask implements Mask {
+
+    public List<Pair<Color, Color>> replacementsColorMap = List.of(
+            new Pair<>(Color.WHITE, Color.BLUE),
+            new Pair<>(Color.WHITE, Color.BLACK),
+            new Pair<>(Color.BLUE, Color.WHITE)
+    );
+
+    public FillMask() {}
+
+    public FillMask(List<Pair<Color, Color>> replacementsColorMap) {
+        this.replacementsColorMap = replacementsColorMap;
+    }
+
     @Override
     public BufferedImage update(BufferedImage bufferedImage) {
         BufferedImage bufImageCopy = BufferedUtil.copyImage(bufferedImage);
 
-        fillArea(bufImageCopy, Color.WHITE.getRGB(), Color.BLUE.getRGB());
-        fillArea(bufImageCopy, Color.WHITE.getRGB(), Color.BLACK.getRGB());
-        fillArea(bufImageCopy, Color.BLUE.getRGB(), Color.WHITE.getRGB());
+        for (Pair<Color, Color> pair : replacementsColorMap) {
+            fillArea(bufImageCopy, pair.getKey().getRGB(), pair.getValue().getRGB());
+        }
 
         return bufImageCopy;
     }

@@ -2,6 +2,7 @@ package org.dreaght.flexure;
 
 import javafx.beans.value.ChangeListener;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import lombok.Getter;
 import org.dreaght.flexure.loader.FileLoader;
 import org.dreaght.flexure.loader.ImageLoader;
@@ -49,7 +50,12 @@ public class ApplicationLifecycle {
                         new GoodbyeHolesMask(),
                         new BorderMask(new Color(144, 238, 144)),
                         new RemoveEverythingExceptMask(new Color(144, 238, 144)),
-                        new StretchingMask()
+                        new StretchingMask(),
+                        new FillMask(List.of(
+                                new Pair<>(Color.BLACK, Color.YELLOW),
+                                new Pair<>(Color.BLACK, new Color(144, 238, 144)),
+                                new Pair<>(Color.YELLOW, Color.BLACK)
+                        ))
                 ));
 
         app.setImageLoader(imageLoaderTemp);
