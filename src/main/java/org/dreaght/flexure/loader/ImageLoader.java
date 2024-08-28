@@ -57,6 +57,13 @@ public class ImageLoader {
 
             newSketch = mask.update(newSketch);
         }
+
+        for (Mask mask : masks) {
+            if (mask instanceof DebugMask debugMask) {
+                newSketch = debugMask.updateDebug(newSketch);
+            }
+        }
+
         sketch = newSketch;
 
         if (!hasAlreadyRendered) {

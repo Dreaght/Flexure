@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 
 @Getter @Setter
 
-public class GaussianMask implements Mask {
+public class GaussianMask implements Mask, DebugMask {
     private int radius = 50;
     private int sigma = 45;
     private double arrowLengthCoefficient = 0.000015;
@@ -19,23 +19,19 @@ public class GaussianMask implements Mask {
     private double arrowOffsetY = 1;
     private boolean shouldRenderVectors = true;
 
+    private BufferedImage lastBlurredImage = null;
+
     @Override
     public BufferedImage update(BufferedImage bufferedImage) {
 
         long startTime = System.currentTimeMillis();
 
         GaussianBlur gaussianBlur = new BoxGaussianBlur();
-        BufferedImage blurredImage = gaussianBlur.applyGaussianBlur(bufferedImage, radius, sigma);
+        lastBlurredImage = gaussianBlur.applyGaussianBlur(bufferedImage, radius, sigma);
 
         System.out.println("Applying has took: " + (System.currentTimeMillis() - startTime));
 
-        BufferedImage invertedGaussianImage = invertGaussianField(blurredImage, bufferedImage);
-
-        if (shouldRenderVectors) {
-            drawArrows(invertedGaussianImage, blurredImage, 20, Color.RED, false);
-        }
-
-        return invertedGaussianImage;
+        return invertGaussianField(lastBlurredImage, bufferedImage);
     }
 
     private BufferedImage invertGaussianField(BufferedImage blurredImage, BufferedImage image) {
@@ -119,6 +115,17 @@ public class GaussianMask implements Mask {
         int[] xPoints = {x2, x3, x4};
         int[] yPoints = {y2, y3, y4};
         g.fillPolygon(xPoints, yPoints, 3);
+    }
+
+    @Override
+    public BufferedImage updateDebug(BufferedImage bufferedImage) {
+        if (shouldRenderVectors) {
+            if (lastBlurredImage == null) return bufferedImage;
+
+            drawArrows(bufferedImage, lastBlurredImage, 20, Color.RED, false);
+        }
+
+        return bufferedImage;
     }
 
     private static class Vector {
