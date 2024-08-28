@@ -23,13 +23,8 @@ public class GaussianMask implements Mask, DebugMask {
 
     @Override
     public BufferedImage update(BufferedImage bufferedImage) {
-
-        long startTime = System.currentTimeMillis();
-
         GaussianBlur gaussianBlur = new BoxGaussianBlur();
         lastBlurredImage = gaussianBlur.applyGaussianBlur(bufferedImage, radius, sigma);
-
-        System.out.println("Applying has took: " + (System.currentTimeMillis() - startTime));
 
         return invertGaussianField(lastBlurredImage, bufferedImage);
     }
