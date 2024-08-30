@@ -51,7 +51,8 @@ public class ImageLoader {
 
         for (Mask mask : masks) {
             if (!hasAlreadyRendered && !((mask instanceof FillMask) ||
-                    (mask instanceof ResizeMask) || mask instanceof InvertColorMask)) {
+                    (mask instanceof ResizeMask) || mask instanceof InvertColorMask ||
+                    mask instanceof BorderMask)) {
                 continue;
             }
 

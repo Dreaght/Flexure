@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.util.stream.IntStream;
 
 @Getter @Setter
-
 public class GaussianMask implements Mask, DebugMask {
     private int radius = 50;
     private int sigma = 45;
